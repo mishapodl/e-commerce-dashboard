@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { API_BASE_URL } from "@/api/config";
 
 import { useProductStore, Product } from "@/store/product";
@@ -11,12 +11,8 @@ import {
 } from "@/components/products/ProductForm";
 import { withAuth } from "@/components/withAuth";
 
-
-interface Props {
-  id: number;
-}
-
-function ProductEditClient({ id }: Props) {
+function ProductEditClient() {
+  const params = useParams();
   const router = useRouter();
   const loading = useProductStore((state) => state.loading);
   const updateProduct = useProductStore((state) => state.updateProduct);
@@ -27,7 +23,7 @@ function ProductEditClient({ id }: Props) {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`${API_BASE_URL}/products/${id}`);
+        const res = await fetch(`${API_BASE_URL}/products/${params.id}`);
         if (!res.ok) throw new Error("Failed to fetch product");
         const data: Product = await res.json();
         setInitialData({
@@ -41,11 +37,11 @@ function ProductEditClient({ id }: Props) {
       }
     }
     fetchProduct();
-  }, [id]);
+  }, [params.id]);
 
   async function onSubmit(data: ProductFormData) {
     try {
-      await updateProduct(id, { ...data, price: Number(data.price) });
+      await updateProduct(params.id, { ...data, price: Number(data.price) });
       router.push("/admin/products");
     } catch {
       alert("Failed to update product");

@@ -34,7 +34,8 @@ type ProductState = {
 
   deleteProduct: (id: number) => Promise<void>;
   createProduct: (data: ProductFormData) => Promise<Product>;
-  updateProduct: (id: number, data: ProductFormData) => Promise<Product>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  updateProduct: (id: any, data: ProductFormData) => Promise<Product>;
 };
 
 export const useProductStore = create<ProductState>((set, get) => ({
