@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
+
 import { useProductStore } from "@/store/product";
+
 import ProductFilters from "@/components/products/ProductFilters";
 import ProductGrid from "@/components/products/ProductGrid";
 import Pagination from "@/components/products/Pagination";

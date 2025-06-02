@@ -1,4 +1,12 @@
 import { create } from "zustand";
+import {
+  ProductFormData,
+  fetchProductsAPI,
+  fetchProductByIdAPI,
+  deleteProductAPI,
+  createProductAPI,
+  updateProductAPI,
+} from "@/api/products";
 
 export type Product = {
   id: number;
@@ -22,6 +30,11 @@ type ProductState = {
   setPage: (page: number) => void;
 
   fetchProducts: () => Promise<void>;
+  fetchProductById: (id: number) => Promise<Product | null>;
+
+  deleteProduct: (id: number) => Promise<void>;
+  createProduct: (data: ProductFormData) => Promise<Product>;
+  updateProduct: (id: number, data: ProductFormData) => Promise<Product>;
 };
 
 export const useProductStore = create<ProductState>((set, get) => ({
@@ -33,8 +46,8 @@ export const useProductStore = create<ProductState>((set, get) => ({
   sortBy: "title",
   page: 1,
 
-  setSearch: (search) => set({ search, page: 1 }), // сбрасываем страницу при поиске
-  setSortBy: (sortBy) => set({ sortBy, page: 1 }), // сбрасываем страницу при сортировке
+  setSearch: (search) => set({ search, page: 1 }),
+  setSortBy: (sortBy) => set({ sortBy, page: 1 }),
   setPage: (page) => set({ page }),
 
   fetchProducts: async () => {
@@ -45,26 +58,11 @@ export const useProductStore = create<ProductState>((set, get) => ({
       const limit = 12;
       const skip = (page - 1) * limit;
 
-      const searchQuery = search
-        ? `/search?q=${encodeURIComponent(search)}`
-        : "";
-      // В DummyJSON API нет параметра сортировки, нужно сортировать локально после fetch
+      const data = await fetchProductsAPI({ search, limit, skip });
 
-      const response = await fetch(
-        `https://dummyjson.com/products${searchQuery}?limit=${limit}&skip=${skip}`
-      );
-
-      if (!response.ok) throw new Error("Failed to fetch products");
-
-      const data = await response.json();
-
-      // Сортируем локально, т.к. API не поддерживает sortBy
       const sortedProducts = [...data.products].sort((a, b) => {
-        if (sortBy === "title") {
-          return a.title.localeCompare(b.title);
-        } else if (sortBy === "price") {
-          return a.price - b.price;
-        }
+        if (sortBy === "title") return a.title.localeCompare(b.title);
+        if (sortBy === "price") return a.price - b.price;
         return 0;
       });
 
@@ -75,6 +73,59 @@ export const useProductStore = create<ProductState>((set, get) => ({
       });
     } catch (error) {
       console.error("Error fetching products:", error);
+      set({ loading: false });
+    }
+  },
+
+  fetchProductById: async (id) => {
+    set({ loading: true });
+    try {
+      const product = await fetchProductByIdAPI(id);
+      set({ loading: false });
+      return product;
+    } catch {
+      set({ loading: false });
+      return null;
+    }
+  },
+
+  deleteProduct: async (id) => {
+    set({ loading: true });
+    try {
+      await deleteProductAPI(id);
+      set((state) => ({
+        products: state.products.filter((p) => p.id !== id),
+        total: state.total - 1,
+      }));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  createProduct: async (data) => {
+    set({ loading: true });
+    try {
+      const newProduct = await createProductAPI(data);
+      await get().fetchProducts();
+      return newProduct;
+    } catch (error) {
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  updateProduct: async (id, data) => {
+    set({ loading: true });
+    try {
+      const updatedProduct = await updateProductAPI(id, data);
+      await get().fetchProducts();
+      return updatedProduct;
+    } catch (error) {
+      throw error;
+    } finally {
       set({ loading: false });
     }
   },

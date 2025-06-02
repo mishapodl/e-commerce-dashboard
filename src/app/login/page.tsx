@@ -18,7 +18,6 @@ export default function LoginPage() {
   const usernameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Фокус на первый инпут при загрузке страницы
     usernameInputRef.current?.focus();
   }, []);
 
@@ -31,7 +30,7 @@ export default function LoginPage() {
       await login(username, password);
       router.replace("/products");
     } catch {
-      setError("Неверный логин или пароль");
+      setError("Invalid login or password.");
     } finally {
       setLoading(false);
     }
@@ -44,11 +43,11 @@ export default function LoginPage() {
         className="bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-lg"
         aria-describedby="login-error"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Вход</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Log In</h2>
 
         <Input
           id="username"
-          label="Имя пользователя"
+          label="User name"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -60,7 +59,7 @@ export default function LoginPage() {
 
         <Input
           id="password"
-          label="Пароль"
+          label="Password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -76,7 +75,7 @@ export default function LoginPage() {
         )}
 
         <Button type="submit" disabled={loading}>
-          {loading ? "Вход..." : "Войти"}
+          {loading ? "Login..." : "Sign In"}
         </Button>
       </form>
     </div>
