@@ -6,12 +6,12 @@
 
 ###  Navigation
 
-| Login                 `/auth/login`        
-| Products list         `/products`          
-| Product Details       `/products/[id]`     
-| Admin list products   `/admin/products`    
-| Edit existing product `/products/[id]/edit`
-| Create new product    `/products/create`   
+  Login                 `/login`        
+  Products list         `/products`          
+  Product Details       `/products/[id]`     
+  Admin list products   `/admin/products`    
+  Edit existing product `/products/[id]/edit`
+  Create new product    `/products/create`   
 
 ##  Products List
 
@@ -20,6 +20,6 @@
 - **Pagintaion** 
 
 ##  CRUD
-- **Create**: 
-- **Edit**: 
-- **Delete**:
+- **Create**
+- **Edit**
+- **Delete**
