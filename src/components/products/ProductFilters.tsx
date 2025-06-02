@@ -19,7 +19,7 @@ export default function ProductFilters() {
       <select
         value={sortBy}
         onChange={(e) => setSortBy(e.target.value as "title" | "price")}
-        className="border border-gray-300 rounded px-3 py-2"
+        className="border border-r-[10px] border-gray-300 rounded px-3 py-2 text-[#847b91]"
       >
         <option value="title">Sort by Title</option>
         <option value="price">Sort by Price</option>

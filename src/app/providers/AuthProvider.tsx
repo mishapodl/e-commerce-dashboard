@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { useAuthStore } from "@/store/auth";
 
 interface AuthProviderProps {

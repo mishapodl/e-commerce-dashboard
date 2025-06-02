@@ -19,7 +19,7 @@ export default function ProductCard({ product }: Props) {
   return (
     <Link
       href={`/products/${product.id}`}
-      className="block border rounded-xl shadow-sm p-4 bg-white hover:shadow-md transition"
+      className="block border rounded-xl shadow-sm p-4 bg-[#c1c1c1] hover:shadow-md transition"
     >
       <div className="relative w-full h-40 mb-4 rounded overflow-hidden">
         <Image
@@ -31,7 +31,7 @@ export default function ProductCard({ product }: Props) {
           priority
         />
       </div>
-      <h2 className="text-lg font-semibold">{product.title}</h2>
+      <h2 className="text-lg text-black font-semibold">{product.title}</h2>
       <p className="text-gray-500 text-sm">{product.description}</p>
       <p className="text-blue-600 font-semibold mt-2">${product.price}</p>
     </Link>

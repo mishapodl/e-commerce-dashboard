@@ -27,7 +27,7 @@ function ProductEditClient({ id }: Props) {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`${API_BASE_URL}${id}`);
+        const res = await fetch(`${API_BASE_URL}/products/${id}`);
         if (!res.ok) throw new Error("Failed to fetch product");
         const data: Product = await res.json();
         setInitialData({

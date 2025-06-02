@@ -1,22 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-
+import { useRouter, useParams } from "next/navigation";
 import { useProductStore, Product } from "@/store/product";
+import { withAuth } from "@/components/withAuth";
 
-type Props = {
-  id: string;
-};
-
-export default function ProductDetailsPage({ id }: Props) {
-  const fetchProductById = useProductStore((state) => state.fetchProductById);
-  const [product, setProduct] = useState<Product | null>(null);
+function ProductDetailsPage() {
+  const { id } = useParams();
   const router = useRouter();
+  const [product, setProduct] = useState<Product | null>(null);
+  const fetchProductById = useProductStore((state) => state.fetchProductById);
 
   useEffect(() => {
+    if (!id) return;
     fetchProductById(Number(id)).then((product) => {
       if (!product) {
         router.replace("/not-found");
@@ -27,7 +24,7 @@ export default function ProductDetailsPage({ id }: Props) {
   }, [id, fetchProductById, router]);
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div>Загрузка...</div>;
   }
 
   return (
@@ -55,3 +52,5 @@ export default function ProductDetailsPage({ id }: Props) {
     </div>
   );
 }
+
+export default withAuth(ProductDetailsPage);
